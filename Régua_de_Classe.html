@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8"><meta charset="utf8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Régua de Classe</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="R%C3%A9gua_de_Classe_files/css2_HS4-.css">
+<style>
+  /* Layout: coluna única, uma pergunta por tela; o resultado é uma escala de desenho técnico com um pino marcando a posição */
+  :root{
+    --bg:#ECEFF2; --surface:#FFFFFF; --ink:#13202C; --muted:#586674; --line:#C6CED6; --accent:#C8321F;
+    --zc:#C8321F; --zr:#E0892E; --zl:#2E6CB4; --zf:#3A3842;
+    --font-display:'Big Shoulders Display','Arial Narrow',Impact,sans-serif;
+    --font-body:'Public Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
+    --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#10171E; --surface:#18222C; --ink:#E8EDF1; --muted:#93A1AD; --line:#2C3945; --accent:#F0604B;
+      --zc:#F0604B; --zr:#F0A24E; --zl:#5C9CE6; --zf:#A9A5B8;
+      color-scheme:dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#10171E; --surface:#18222C; --ink:#E8EDF1; --muted:#93A1AD; --line:#2C3945; --accent:#F0604B;
+    --zc:#F0604B; --zr:#F0A24E; --zl:#5C9CE6; --zf:#A9A5B8;
+    color-scheme:dark;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:var(--font-body); font-size:16px; line-height:1.5;
+    padding-block:20px 56px;
+    padding-left:max(16px,env(safe-area-inset-left,0px));
+    padding-right:max(16px,env(safe-area-inset-right,0px));
+  }
+  .wrap{max-width:640px; margin:0 auto}
+  .wrap > section{display:flex; flex-direction:column; gap:22px; min-width:0}
+
+  h1,h2,h3{margin:0; text-wrap:balance}
+  .display{font-family:var(--font-display); font-weight:800; text-transform:uppercase; line-height:.92; letter-spacing:.01em}
+  .eyebrow,.sec{font-family:var(--font-mono); font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); margin:0}
+  p{margin:0}
+  .lead{font-size:17px; line-height:1.5; max-width:60ch}
+  .small{font-size:14px; line-height:1.55; color:var(--muted); max-width:62ch}
+
+  .btn{
+    font-family:var(--font-display); font-weight:700; font-size:22px; letter-spacing:.05em; text-transform:uppercase;
+    background:var(--ink); color:var(--bg); border:1px solid var(--ink); border-radius:2px;
+    padding:12px 22px; cursor:pointer; align-self:flex-start; min-height:48px;
+  }
+  .btn.ghost{background:transparent; color:var(--ink); border-color:var(--line)}
+  .btn.ghost:hover{border-color:var(--ink)}
+  .btn:focus-visible,.opt:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .actions{display:flex; flex-wrap:wrap; gap:10px}
+
+  /* Régua */
+  .scale{position:relative; margin-inline:40px; padding-top:30px}
+  .ticks{position:relative; height:24px}
+  .tick{position:absolute; bottom:0; width:1px; height:8px; background:var(--ink); transform:translateX(-.5px)}
+  .tick.m{height:14px}
+  .tick.M{height:22px}
+  .band{height:8px; background:linear-gradient(90deg,var(--zc) 0%,var(--zr) 33.3%,var(--zl) 66.6%,var(--zf) 100%)}
+  .names{position:relative; height:28px; margin-top:8px}
+  .nm{
+    position:absolute; top:0; transform:translateX(-50%); white-space:nowrap;
+    font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.04em;
+    font-size:clamp(12px,3.7vw,16px); line-height:1.1;
+  }
+  .pin{position:absolute; top:0; left:var(--p); width:0; height:62px; animation:drop .9s cubic-bezier(.2,.8,.2,1) backwards}
+  .pin b{
+    position:absolute; top:0; left:0; transform:translateX(-50%);
+    font:500 11px/1 var(--font-mono); letter-spacing:.1em; background:var(--ink); color:var(--bg); padding:5px 7px;
+  }
+  .pin i{position:absolute; top:20px; bottom:0; left:-1px; width:2px; background:var(--ink)}
+  @keyframes drop{from{left:50%}}
+
+  .mini{position:relative; height:16px; margin-inline:8px}
+  .mini::before{content:""; position:absolute; left:0; right:0; top:6px; height:4px; background:linear-gradient(90deg,var(--zc) 0%,var(--zr) 33.3%,var(--zl) 66.6%,var(--zf) 100%)}
+  .mini .n{position:absolute; top:2px; width:1px; height:12px; background:var(--ink); opacity:.55}
+  .mini .dot{position:absolute; top:1px; width:14px; height:14px; transform:translateX(-50%); background:var(--ink); border:2px solid var(--bg); outline:1px solid var(--ink)}
+
+  /* Quiz */
+  .prog{display:flex; gap:3px}
+  .prog i{flex:1 1 0; height:10px; background:var(--line); min-width:0}
+  .prog i.done{background:var(--ink)}
+  .prog i.cur{background:var(--accent)}
+  .meta{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap}
+  .meta span{font-family:var(--font-mono); font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted)}
+  #prompt{font-family:var(--font-body); font-weight:600; font-size:21px; line-height:1.3; max-width:34ch}
+  #opts{display:flex; flex-direction:column; gap:10px}
+  .opt{
+    display:grid; grid-template-columns:auto minmax(0,1fr); gap:12px; text-align:left; width:100%;
+    background:var(--surface); color:var(--ink); border:1px solid var(--line); border-radius:2px;
+    padding:14px; font:inherit; font-size:15.5px; line-height:1.45; cursor:pointer; min-height:56px;
+  }
+  .opt:hover{border-color:var(--ink)}
+  .opt .k{font-family:var(--font-mono); font-size:12px; color:var(--muted); padding-top:3px}
+  .opt[aria-pressed="true"]{background:var(--ink); color:var(--bg); border-color:var(--ink)}
+  .opt[aria-pressed="true"] .k{color:var(--bg)}
+  .in{animation:rise .22s ease both}
+  @keyframes rise{from{opacity:0; transform:translateY(6px)}}
+
+  /* Resultado */
+  .verdict{font-size:clamp(40px,12.5vw,68px)}
+  .posline{font-family:var(--font-mono); font-size:13px; color:var(--muted)}
+  .note{border:1px solid var(--line); background:var(--surface); padding:12px 14px; font-size:14px; line-height:1.5}
+  .block{display:flex; flex-direction:column; gap:14px; min-width:0}
+  .dist{display:grid; grid-template-columns:92px minmax(0,1fr) 28px; align-items:center; gap:10px}
+  .dist .lb{font-family:var(--font-display); font-weight:700; text-transform:uppercase; letter-spacing:.04em; font-size:17px}
+  .dist .bar{height:10px; background:var(--line)}
+  .dist .bar i{display:block; height:100%; background:var(--c)}
+  .dist .ct{font-family:var(--font-mono); font-size:13px; text-align:right; font-variant-numeric:tabular-nums}
+  .theme{display:flex; flex-direction:column; gap:8px}
+  .theme .hd{display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 12px; align-items:baseline}
+  .theme .hd b{font-weight:600; font-size:15px}
+  .theme .hd span{font-family:var(--font-mono); font-size:12px; color:var(--muted)}
+  .copymsg{font-size:13px; color:var(--muted); min-height:1.2em; word-break:break-word; user-select:text}
+
+  @media (prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important}
+  }
+</style>
+
+<div class="wrap" lang="pt-BR">
+
+  <section id="intro">
+    <p class="eyebrow">Teste de posição · 20 perguntas</p>
+    <h1 class="display" style="font-size:clamp(54px,17vw,92px)">Régua<br>de Classe</h1>
+    <p class="lead"></p>
+    Vinte perguntas sobre propriedade, Estado, nação, economia e mudança
+ social. Cada resposta marca um ponto entre quatro posições, e a média 
+coloca você na régua. O teste é tão ruim ou tão bom quanto qualquer um 
+que você faria online, não leve pro pessoal. Feito com IA.<div id="introRuler"><div class="scale"><div class="ticks"><span class="tick M" style="left:0%"></span><span class="tick " style="left:3.3333333333333335%"></span><span class="tick " style="left:6.666666666666667%"></span><span class="tick " style="left:10%"></span><span class="tick " style="left:13.333333333333334%"></span><span class="tick m" style="left:16.666666666666664%"></span><span class="tick " style="left:20%"></span><span class="tick " style="left:23.333333333333332%"></span><span class="tick " style="left:26.666666666666668%"></span><span class="tick " style="left:30%"></span><span class="tick M" style="left:33.33333333333333%"></span><span class="tick " style="left:36.666666666666664%"></span><span class="tick " style="left:40%"></span><span class="tick " style="left:43.333333333333336%"></span><span class="tick " style="left:46.666666666666664%"></span><span class="tick m" style="left:50%"></span><span class="tick " style="left:53.333333333333336%"></span><span class="tick " style="left:56.666666666666664%"></span><span class="tick " style="left:60%"></span><span class="tick " style="left:63.33333333333333%"></span><span class="tick M" style="left:66.66666666666666%"></span><span class="tick " style="left:70%"></span><span class="tick " style="left:73.33333333333333%"></span><span class="tick " style="left:76.66666666666667%"></span><span class="tick " style="left:80%"></span><span class="tick m" style="left:83.33333333333334%"></span><span class="tick " style="left:86.66666666666667%"></span><span class="tick " style="left:90%"></span><span class="tick " style="left:93.33333333333333%"></span><span class="tick " style="left:96.66666666666667%"></span><span class="tick M" style="left:100%"></span></div><div class="band"></div><div class="names"><span class="nm" style="left:0%;color:var(--zc)">Comunista</span><span class="nm" style="left:33.33333333333333%;color:var(--zr)">Reformista</span><span class="nm" style="left:66.66666666666666%;color:var(--zl)">Liberal</span><span class="nm" style="left:100%;color:var(--zf)">Fascista</span></div></div></div>
+    <p class="small">A régua mede duas coisas ligadas: a posição diante 
+da propriedade privada dos meios de produção e a disposição de usar a 
+força do Estado para sustentá-la. Por isso o teste parte de uma análise 
+materialista, com a luta de classes como eixo. Cada alternativa foi 
+escrita na voz de quem defende aquela posição, e a ordem das respostas 
+muda a cada pergunta.</p>
+    <button class="btn" id="start" type="button">Começar</button>
+  </section>
+
+  <section id="quiz" hidden="">
+    <div class="prog" id="prog" aria-hidden="true"></div>
+    <div class="meta"><span id="count"></span><span id="theme"></span></div>
+    <div id="card" class="in" style="display:flex; flex-direction:column; gap:18px">
+      <h2 id="prompt"></h2>
+      <div id="opts"></div>
+    </div>
+    <div class="actions"><button class="btn ghost" id="back" type="button">Voltar</button></div>
+  </section>
+
+  <section id="result" hidden="">
+    <p class="eyebrow">Seu resultado</p>
+    <div style="display:flex; flex-direction:column; gap:8px">
+      <h2 class="display verdict" id="verdict"></h2>
+      <p class="posline" id="posline"></p>
+    </div>
+    <div id="resRuler"></div>
+    <p class="lead" id="desc"></p>
+    <p class="note" id="spread" hidden=""></p>
+
+    <div class="block">
+      <h3 class="sec">Suas respostas por posição</h3>
+      <div id="dist" class="block" style="gap:10px"></div>
+    </div>
+
+    <div class="block">
+      <h3 class="sec">Posição em cada tema</h3>
+      <div id="themes" class="block" style="gap:18px"></div>
+    </div>
+
+    <p class="small">A régua reflete o marco do teste: uma leitura 
+materialista, em que a posição é definida pela relação com a propriedade
+ e com a força que a sustenta. Não é um ranking de melhor ou pior.</p>
+
+    <div class="actions">
+      <button class="btn" id="again" type="button">Refazer</button>
+      <button class="btn ghost" id="copy" type="button">Copiar resultado</button>
+    </div>
+    <p class="copymsg" id="copymsg" role="status"></p>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  var KEYS=["c","r","l","f"];
+  var SC={c:0,r:1,l:2,f:3};
+  var NAMES={c:"Comunista",r:"Reformista",l:"Liberal",f:"Fascista"};
+  var ZVAR={c:"var(--zc)",r:"var(--zr)",l:"var(--zl)",f:"var(--zf)"};
+  var THEMES=["Trabalho e propriedade","Estado e força","Nação e opressões","Economia e bem-estar","Mudança e sociedade"];
+
+  var DESC={
+    c:"Você vê a sociedade dividida em classes com interesses opostos e identifica a propriedade privada dos meios de produção como a raiz da desigualdade. A saída que você defende é a superação do capitalismo, pela organização e pela luta da classe trabalhadora.",
+    r:"Você reconhece o conflito entre capital e trabalho, mas acredita que ele pode ser regulado dentro do capitalismo: Estado de bem-estar, sindicatos fortes, impostos progressivos e conquistas graduais por via institucional.",
+    l:"Você defende a propriedade privada, o mercado e as liberdades individuais como base da prosperidade. Vê o Estado como um árbitro limitado e a desigualdade como algo a enfrentar com crescimento e igualdade perante a lei.",
+    f:"Suas respostas colocam a nação acima das classes e valorizam um Estado forte, que impõe a ordem, inclusive pela força, contra sindicatos, partidos e grupos que dividam o povo. Na análise materialista, esse é o campo que preserva a propriedade privada por meios autoritários."
+  };
+
+  var Q=[
+    {t:0,q:"Quem deve ser o dono das fábricas, das terras e dos bancos?",o:{
+      c:"A sociedade, de forma coletiva. A propriedade privada desses meios é a raiz da exploração.",
+      r:"Continuam privados, com regulação forte, imposto sobre grandes fortunas e participação dos trabalhadores nos lucros.",
+      l:"Donos privados. A propriedade protegida por lei é a base da liberdade e da prosperidade.",
+      f:"Donos privados, desde que sirvam à nação. O Estado dirige o que for estratégico e pune quem a prejudica."}},
+    {t:0,q:"De onde vem o lucro de uma empresa?",o:{
+      c:"Do trabalho não pago: o patrão fica com parte do valor que o trabalhador produz.",
+      r:"Da atividade empresarial, mas o poder desigual entre patrão e empregado distorce a divisão. A lei e a negociação corrigem isso.",
+      l:"Do capital investido, do risco assumido e da capacidade de organizar a produção.",
+      f:"Do esforço do empresário nacional, desde que reinvestido no país. Lucro que foge da pátria é parasitismo."}},
+    {t:0,q:"O que você pensa da CLT e dos direitos trabalhistas?",o:{
+      c:"São conquistas da luta, mas mantêm o trabalhador como vendedor da própria força de trabalho. O objetivo é superar o assalariamento.",
+      r:"Devem ser mantidos e ampliados, inclusive para quem trabalha por aplicativo.",
+      l:"Devem ser flexibilizados. Contratos livres entre as partes geram mais empregos do que regras rígidas.",
+      f:"Sindicatos e patrões devem ser organizados pelo Estado, que arbitra os conflitos em nome do interesse nacional."}},
+    {t:0,q:"Uma greve geral para o país por aumento de salário.",o:{
+      c:"É a principal arma da classe trabalhadora e pode ser o embrião de um poder alternativo.",
+      r:"É legítima como instrumento de negociação, dentro de regras que levem a acordo.",
+      l:"É um direito, mas não pode violar a propriedade nem o direito de ir e vir. Serviços essenciais devem funcionar.",
+      f:"Deve ser proibida. Greve geral é sabotagem contra a nação, e o Estado deve restabelecer a ordem."}},
+
+    {t:1,q:"O que é o Estado, hoje?",o:{
+      c:"Um instrumento de dominação de classe. Mesmo com eleições, ele administra os interesses comuns dos donos do capital.",
+      r:"Um espaço em disputa. Pela via eleitoral e pela pressão social, pode servir à maioria.",
+      l:"Um árbitro necessário e perigoso. Deve ser pequeno e limitado pela constituição.",
+      f:"A encarnação da nação. Deve ser forte e estar acima dos partidos e dos interesses particulares."}},
+    {t:1,q:"O que você pensa das eleições e da democracia representativa?",o:{
+      c:"A democracia burguesa é limitada, porque o dinheiro pesa nas decisões. A democracia de verdade é o poder popular nos locais de trabalho e de moradia.",
+      r:"É uma conquista a defender e aprofundar, com mais participação popular.",
+      l:"É o melhor sistema já criado, com alternância de poder e direitos individuais.",
+      f:"Eleições dividem o povo. Um líder forte, que fale pela nação, governa melhor do que a disputa entre partidos."}},
+    {t:1,q:"Uma crise econômica grave gera revolta popular e a ordem é ameaçada. O que fazer?",o:{
+      c:"Aprofundar a organização popular e transformar a crise em ruptura com o sistema.",
+      r:"Negociar reformas que atendam às demandas e preservem as instituições.",
+      l:"Manter a ordem institucional e a segurança dos contratos. Reformas de mercado recuperam a economia.",
+      f:"Restaurar a ordem com firmeza, usando a força policial e militar se preciso, e punir os agitadores."}},
+    {t:1,q:"Qual é o papel da polícia e das Forças Armadas?",o:{
+      c:"Em geral, são instrumentos do Estado de classe, usados contra os pobres. No longo prazo devem ser substituídas por organização popular.",
+      r:"Devem ser reformadas, com controle civil e combate à violência policial.",
+      l:"Garantem a lei e a propriedade e devem agir dentro da lei, com controle judicial.",
+      f:"Devem ter autoridade e respaldo políticos amplos. Quem ameaça a ordem precisa ser duramente punido."}},
+
+    {t:2,q:"O que pesa mais para um trabalhador brasileiro?",o:{
+      c:"A solidariedade com trabalhadores de qualquer país. O adversário são as classes dominantes, não as fronteiras.",
+      r:"O interesse nacional, entendido como o bem-estar da maioria: bons empregos e serviços públicos.",
+      l:"O interesse de cada indivíduo. A cooperação pelo mercado serve a todos, sem identidade coletiva imposta.",
+      f:"A nação acima de tudo. Brasileiros de todas as classes têm um destino comum e devem se unir contra inimigos internos e externos."}},
+    {t:2,q:"Qual deve ser a política de imigração?",o:{
+      c:"Fronteiras servem ao capital, que circula livre enquanto o trabalhador é contido. Imigrante é irmão de classe.",
+      r:"Acolhimento com integração e direitos iguais, para que a disputa por emprego não divida os trabalhadores.",
+      l:"Circulação livre de pessoas, trabalho e capital, com regras de segurança e de impostos.",
+      f:"Restrição rigorosa. O país deve proteger sua identidade e seus empregos."}},
+    {t:2,q:"De onde vêm o racismo e o machismo?",o:{
+      c:"Têm raízes materiais ligadas à exploração e servem para dividir a classe. A luta contra eles é inseparável da luta contra o capitalismo.",
+      r:"São problemas reais, combatidos com leis, cotas e políticas públicas dentro do capitalismo.",
+      l:"Combatem-se com igualdade perante a lei e liberdade individual. Tratar pessoas por grupos gera novas injustiças.",
+      f:"São divisões que enfraquecem a unidade nacional. A tradição e a hierarquia organizam a sociedade melhor do que reivindicações de grupos."}},
+    {t:2,q:"Por que o Brasil, tão rico em recursos, tem tanta desigualdade?",o:{
+      c:"Por sua posição dependente no capitalismo mundial e por uma elite que lucra com isso. Só a ruptura com esse modelo muda o quadro.",
+      r:"Por falta de investimento em indústria, educação e proteção social. Um desenvolvimento planejado e inclusivo resolve aos poucos.",
+      l:"Por excesso de burocracia, impostos e protecionismo. Abrir a economia traria crescimento.",
+      f:"Por corrupção, divisão e perda de disciplina e moral nacionais. O país precisa de um líder e de ordem para se reerguer."}},
+
+    {t:3,q:"Como devem funcionar a saúde e a educação?",o:{
+      c:"Como direitos universais, 100% públicos, sem lucro e financiados pelo excedente social.",
+      r:"Com serviços públicos universais e fortes, complementados por um setor privado regulado.",
+      l:"Com concorrência e escolha: planos privados, vouchers e um Estado que garante só o mínimo.",
+      f:"Sob direção do Estado, voltados a formar cidadãos fortes e disciplinados, com prioridade a quem contribui com a nação."}},
+    {t:3,q:"O que fazer com estatais como a Petrobras e os bancos públicos?",o:{
+      c:"Manter setores-chave sob controle público e democrático, para planejar a economia pela necessidade e não pelo lucro.",
+      r:"Mantê-las públicas e bem geridas, a serviço do desenvolvimento nacional.",
+      l:"Privatizar a maior parte. Empresas privadas são mais eficientes.",
+      f:"Manter os setores estratégicos sob comando do Estado, como base da força nacional e aliados do capital nacional."}},
+    {t:3,q:"O 1% mais rico concentra boa parte da riqueza do país. O que isso significa?",o:{
+      c:"É o resultado normal do capitalismo: acumulação de um lado, exploração do outro. Só acaba com o fim da classe proprietária.",
+      r:"É um problema a corrigir com imposto progressivo, salário mínimo e transferência de renda.",
+      l:"A desigualdade de resultado é natural. O que importa é a oportunidade e a redução da pobreza pelo crescimento.",
+      f:"É tolerável se os ricos servirem à nação. O problema é quem enriquece sem lealdade ao país."}},
+    {t:3,q:"Quem deve decidir o que e quanto se produz?",o:{
+      c:"Os próprios trabalhadores, de forma democrática e planejada, em vez do mercado.",
+      r:"Uma economia mista: mercado com planejamento estatal, política industrial e banco público.",
+      l:"O mercado, por meio de preços e concorrência, que aloca recursos melhor do que qualquer planejador.",
+      f:"O Estado nacional, em acordo com empresários e trabalhadores organizados por ele, num sistema corporativo."}},
+
+    {t:4,q:"Como se muda uma sociedade?",o:{
+      c:"Pela organização e pela luta da classe trabalhadora, até uma ruptura revolucionária com o capitalismo.",
+      r:"Por eleições, sindicatos e movimentos, conquistando melhorias graduais dentro das instituições.",
+      l:"Por indivíduos livres, inovação, empreendedorismo e debate público, com reformas pontuais.",
+      f:"Pela vontade de um movimento nacional unido sob um líder, que remove os obstáculos pela força."}},
+    {t:4,q:"Qual é a sua visão do capitalismo?",o:{
+      c:"Um sistema baseado na exploração, com crises inevitáveis. Precisa ser superado.",
+      r:"Gera riqueza e injustiça. Pode ser domesticado por um Estado e por sindicatos fortes.",
+      l:"O melhor sistema para produzir riqueza e liberdade. Seus problemas se resolvem com mais concorrência.",
+      f:"Útil quando subordinado à nação. O capital financeiro internacional desagrega o país e precisa ser controlado."}},
+    {t:4,q:"Quem defende acabar com direitos de outros grupos deve ter liberdade de propaganda e de organização?",o:{
+      c:"A liberdade é de classe: ampla para os trabalhadores, restrita para quem defende restaurar a exploração.",
+      r:"Em geral sim, com limites legais contra discurso de ódio e ataques à democracia.",
+      l:"Sim, com ampla liberdade de expressão e de organização, salvo incitação direta à violência.",
+      f:"Não. Quem divide a nação ou defende outro regime deve ser proibido e punido."}},
+    {t:4,q:"Uma sociedade justa é aquela em que…",o:{
+      c:"Não existem classes. Ninguém vive do trabalho alheio e todos decidem coletivamente a produção.",
+      r:"Todos têm um piso de direitos e oportunidades, ainda que existam diferenças de renda e de propriedade.",
+      l:"Cada um é livre para buscar seu projeto, e as diferenças resultam de escolhas e esforços distintos.",
+      f:"Cada classe e cada pessoa cumpre sua função numa ordem hierárquica, sob a liderança da nação."}}
+  ];
+
+  var st={i:0,ans:[],order:[]};
+  var lock=false;
+  var $=function(id){return document.getElementById(id)};
+
+  function shuffle(a){
+    for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}
+    return a;
+  }
+  function pad(n){return n<10?"0"+n:""+n}
+  function show(name){
+    ["intro","quiz","result"].forEach(function(n){$(n).hidden=(n!==name)});
+    try{window.scrollTo(0,0)}catch(e){}
+  }
+
+  function rulerHTML(pos){
+    var t="",names="",i;
+    for(i=0;i<=30;i++){
+      var cls=i%10===0?"M":(i%5===0?"m":"");
+      t+='<span class="tick '+cls+'" style="left:'+(i/30*100)+'%"></span>';
+    }
+    KEYS.forEach(function(k,idx){
+      names+='<span class="nm" style="left:'+(idx/3*100)+'%;color:'+ZVAR[k]+'">'+NAMES[k]+'</span>';
+    });
+    var pin=(pos==null)?"":'<div class="pin" style="--p:'+pos+'%"><b>VOCÊ</b><i></i></div>';
+    return '<div class="scale">'+pin+'<div class="ticks">'+t+'</div><div class="band"></div><div class="names">'+names+'</div></div>';
+  }
+  function miniHTML(v){
+    var p=v/3*100;
+    var n="";
+    [0,33.333,66.667,100].forEach(function(x){n+='<i class="n" style="left:'+x+'%"></i>'});
+    return '<div class="mini">'+n+'<b class="dot" style="left:'+p+'%"></b></div>';
+  }
+  function zoneLabel(v){
+    var n=Math.round(v), d=v-n;
+    if(Math.abs(d)<0.3) return NAMES[KEYS[n]];
+    var m=d>0?n+1:n-1;
+    var a=Math.min(n,m), b=Math.max(n,m);
+    return "Entre "+NAMES[KEYS[a]].toLowerCase()+" e "+NAMES[KEYS[b]].toLowerCase();
+  }
+  function mean(a){return a.reduce(function(s,x){return s+x},0)/a.length}
+
+  function renderQ(){
+    var i=st.i,q=Q[i];
+    if(!st.order[i]) st.order[i]=shuffle(KEYS.slice());
+    $("count").textContent=pad(i+1)+" / "+Q.length;
+    $("theme").textContent=THEMES[q.t];
+    $("prompt").textContent=q.q;
+    var p="";
+    for(var j=0;j<Q.length;j++){p+='<i class="'+(j<i?"done":(j===i?"cur":""))+'"></i>'}
+    $("prog").innerHTML=p;
+    var box=$("opts");
+    box.innerHTML="";
+    st.order[i].forEach(function(k,j){
+      var b=document.createElement("button");
+      b.type="button";
+      b.className="opt";
+      b.setAttribute("aria-pressed",st.ans[i]===k?"true":"false");
+      var kk=document.createElement("span");kk.className="k";kk.textContent="ABCD".charAt(j);
+      var tt=document.createElement("span");tt.textContent=q.o[k];
+      b.appendChild(kk);b.appendChild(tt);
+      b.addEventListener("click",function(){pick(k)});
+      box.appendChild(b);
+    });
+    var card=$("card");
+    card.classList.remove("in");void card.offsetWidth;card.classList.add("in");
+  }
+
+  function pick(k){
+    if(lock) return;
+    lock=true;
+    st.ans[st.i]=k;
+    var kids=$("opts").children;
+    for(var j=0;j<kids.length;j++){
+      kids[j].setAttribute("aria-pressed",st.order[st.i][j]===k?"true":"false");
+    }
+    setTimeout(function(){
+      lock=false;
+      if(st.i<Q.length-1){st.i++;renderQ()}else{finish()}
+    },260);
+  }
+
+  function finish(){
+    var vals=st.ans.map(function(k){return SC[k]});
+    var m=mean(vals);
+    var sd=Math.sqrt(mean(vals.map(function(v){return (v-m)*(v-m)})));
+    var pos=Math.round(m/3*100);
+    var label=zoneLabel(m);
+    var near=KEYS[Math.round(m)];
+    var counts={c:0,r:0,l:0,f:0};
+    st.ans.forEach(function(k){counts[k]++});
+
+    $("verdict").textContent=label;
+    $("posline").textContent="Posição "+pos+" na escala de 0 a 100";
+    $("resRuler").innerHTML=rulerHTML(pos);
+    $("desc").textContent=DESC[near];
+
+    var sp=$("spread");
+    if(sd>=1.05){
+      sp.hidden=false;
+      sp.textContent="Suas respostas ficaram espalhadas pela régua, com posições bem distantes entre si. A média esconde isso, então vale olhar a distribuição abaixo.";
+    }else{sp.hidden=true}
+
+    var d="";
+    KEYS.forEach(function(k){
+      d+='<div class="dist"><span class="lb" style="color:'+ZVAR[k]+'">'+NAMES[k]+'</span><span class="bar"><i style="--c:'+ZVAR[k]+';width:'+(counts[k]/Q.length*100)+'%"></i></span><span class="ct">'+counts[k]+'</span></div>';
+    });
+    $("dist").innerHTML=d;
+
+    var th="";
+    THEMES.forEach(function(name,ti){
+      var tv=mean(vals.slice(ti*4,ti*4+4));
+      th+='<div class="theme"><div class="hd"><b>'+name+'</b><span>'+zoneLabel(tv)+'</span></div>'+miniHTML(tv)+'</div>';
+    });
+    $("themes").innerHTML=th;
+
+    $("copymsg").textContent="";
+    $("copy").onclick=function(){
+      var txt="Régua de Classe: "+label+" (posição "+pos+" de 100). Respostas: Comunista "+counts.c+", Reformista "+counts.r+", Liberal "+counts.l+", Fascista "+counts.f+".";
+      var done=function(ok){$("copymsg").textContent=ok?"Resultado copiado.":txt};
+      try{
+        navigator.clipboard.writeText(txt).then(function(){done(true)},function(){done(false)});
+      }catch(e){done(false)}
+    };
+    show("result");
+  }
+
+  $("introRuler").innerHTML=rulerHTML(null);
+  $("start").addEventListener("click",function(){
+    st={i:0,ans:[],order:[]};lock=false;
+    renderQ();show("quiz");
+  });
+  $("back").addEventListener("click",function(){
+    if(lock) return;
+    if(st.i===0){show("intro")}else{st.i--;renderQ()}
+  });
+  $("again").addEventListener("click",function(){
+    st={i:0,ans:[],order:[]};lock=false;
+    show("intro");
+  });
+})();
+</script>
+
+</body></html>
